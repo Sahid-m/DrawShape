@@ -15,8 +15,8 @@ public class Main {
 	static ArrayList<Object> Largest_Shape = new ArrayList<>();
 	static int Square_counter = 0;
 	static int Triangle_counter = 0;
-	static ArrayList<Integer> Avg_time = new ArrayList<>();
-	static String Last_Drawn = "T 20 23 25";
+	static ArrayList<Double> Avg_time = new ArrayList<>();
+	static String Last_Drawn = "S 40";
 	static boolean UserPlay = true;
 
 	// IMPLEMENT NEW CLASS THAT INITIATE.
@@ -185,17 +185,22 @@ public class Main {
 		System.out.println("\n Making Square");
 		double area = lenght * lenght;
 
-		square.Draw(lenght);
+		
+		long startTime = System.currentTimeMillis();
+		square.Draw(lenght , sb);
+        long endTime = System.currentTimeMillis();
+        long elapsedTime = endTime - startTime;
 
+        Avg_time.add((double) elapsedTime);
 		// Adding Shape to arrays to write in file later
 		Drawn_Shape.add("Square " + lenght);
 		Square_counter += 1;
 		Last_Drawn = "S " + lenght;
 		if (Largest_Shape.isEmpty()) {
-			Largest_Shape.add(0, lenght);
+			Largest_Shape.add(0, area);
 			Largest_Shape.add(1, "Square");
 		}else {
-			if ((Double) Largest_Shape.get(0) <= area) {
+			if ((double) Largest_Shape.get(0) <= area) {
 				Largest_Shape.set(0, area);
 				Largest_Shape.set(1, "Square");
 			}	
@@ -217,18 +222,22 @@ public class Main {
 		double angle3 = angles[2];
 		double area = triangle.CalculateArea(side1, side2, side3);
 
-		triangle.Draw(side1, side2, side3, angles);
+		long startTime = System.currentTimeMillis();
+		triangle.Draw(side1,side2,side3,angles , sb);
+        long endTime = System.currentTimeMillis();
+        long elapsedTime = endTime - startTime;
 
+        Avg_time.add((double)elapsedTime);
 		// Adding Shape to arrays to write in file later
 		Drawn_Shape.add("Trinagle " + side1 + " " + side2 + " " + side3 + " " + "( Angles : " + angle1 + " " + angle2
 				+ " " + angle3 + " )");
 		Triangle_counter += 1;
 		Last_Drawn = "T " + side1 + " " + side2 + " " + side3;
-		if (Largest_Shape.isEmpty()) {
+		if(Largest_Shape.isEmpty()) {
 			Largest_Shape.add(0, area);
 			Largest_Shape.add(1, "Triangle");
 		}else {
-			if ((Double) Largest_Shape.get(0) <= area) {
+			if ((double) Largest_Shape.get(0) <= area) {
 				Largest_Shape.set(0, area);
 				Largest_Shape.set(1, "Triangle");
 			}	

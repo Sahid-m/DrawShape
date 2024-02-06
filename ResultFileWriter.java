@@ -5,9 +5,10 @@ import java.util.ArrayList;
 
 public class ResultFileWriter {
 	public static void writeToFile(String FileName, ArrayList<String> DrawnShapes, ArrayList<Object> LargestShape,
-			int SquareCounter, int TriangleCounter, ArrayList<Integer> avgTime) {
+			int SquareCounter, int TriangleCounter, ArrayList<Double> avg_time) {
 		
 		ConsoleUtils utils = new ConsoleUtils();
+		utils.clearScreen();
 		utils.ShowMainHeading();
 		File myFile = new File(FileName);
 		System.out.println("\n Writing in File");
@@ -32,13 +33,14 @@ public class ResultFileWriter {
 				// ALL DRAWN SHAPES
 				File.write("Drawn Shapes : ");
 				for (int i = 0; i < DrawnShapes.size(); i++) {
-					File.write(i + ") " + DrawnShapes.get(i) + " ");
+					int no = i + 1;
+					File.write(no + ") " + DrawnShapes.get(i) + " ");
 				}
 
 				// LARGEST SHAPE
 				File.write(" \nLargest Shape : ");
 				String Largest_Shape = String.valueOf(LargestShape.get(1)) + " " + String.valueOf(LargestShape.get(0));
-				File.write(Largest_Shape);
+				File.write(Largest_Shape + " ( Area )");
 
 				File.write(" \nMost Frequent Drawn Shape : ");
 				if (SquareCounter > TriangleCounter) {
@@ -48,6 +50,16 @@ public class ResultFileWriter {
 				} else {
 					File.write("Both Drawn Equal Times i.e. " + SquareCounter + " times");
 				}
+				
+				// Average Time 
+				File.write("\nAverage Time to draw shape: ");
+				double sum = 0;
+				for(int i = 0; i < avg_time.size(); i++) {
+					sum += avg_time.get(i);
+				}
+				double avgTime = (sum / avg_time.size()) / 1000;
+				
+				File.write(String.valueOf(avgTime) + " seconds");
 
 				File.close();
 

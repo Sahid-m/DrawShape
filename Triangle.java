@@ -1,3 +1,4 @@
+import swiftbot.SwiftBotAPI;
 
 public class Triangle {
 	
@@ -63,15 +64,19 @@ public class Triangle {
 	
 	public double[] CalculateAngles(int side1 , int side2 , int side3) {
 		
-		
-		
-		double[] angles = {1.2,1.4,1.4};
+		// Calculate angles using the law of cosines
+        double angle1 = Math.toDegrees(Math.acos((side2 * side2 + side3 * side3 - side1 * side1) / (2.0 * side2 * side3)));
+        double angle2 = Math.toDegrees(Math.acos((side1 * side1 + side3 * side3 - side2 * side2) / (2.0 * side1 * side3)));
+        double angle3 = Math.toDegrees(Math.acos((side1 * side1 + side2 * side2 - side3 * side3) / (2.0 * side1 * side2)));
+
+        // Store angles in an array
+        double[] angles = { angle1, angle2, angle3 };
 		
 		return angles;
 		
 	}
 	
-	public void Draw(int side1 , int side2 , int side3 , double[] angles) {
+	public void Draw(int side1 , int side2 , int side3 , double[] angles , SwiftBotAPI sb) {
 		System.out.println("Drawing Triangle of lenghts " + side1 + " " + side2 + " " + side3 + " .");
 		System.out.println("Drawing With Angles:  " + angles[0] + " " + angles[1] + " " + angles[2] + " .");
 		System.out.println("SHOWING GREEN UNDERLIGHTS");

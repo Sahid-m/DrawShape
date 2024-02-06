@@ -1,4 +1,7 @@
 import java.util.Scanner;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
 import swiftbot.Button;
 import swiftbot.SwiftBotAPI;
 
@@ -21,45 +24,46 @@ public class ConsoleUtils {
 		}
 	}
 
-	public int getButtonInput(String Question, char Button1, char Button2 , SwiftBotAPI sb) {
 
-		final int TIMEOUT_IN_MILLI_SEC = 5_000;
-		sb.disableAllButtons();
-		long EndTime = System.currentTimeMillis() + TIMEOUT_IN_MILLI_SEC;
-		System.out.println(Question);
-		Button B1 = getButton(Button1);
-		Button B2 = getButton(Button2);
-		int[] rint = {-1};
+	
+	public int getButtonInput(String Question, char Button1, char Button2, SwiftBotAPI sb) {
+	    final int TIMEOUT_IN_MILLI_SEC = 5_000;
+	    sb.disableAllButtons();
+	    System.out.println(Question);
+	    Button B1 = getButton(Button1);
+	    Button B2 = getButton(Button2);
+	    int[] rint = {-1};
+	    CountDownLatch latch = new CountDownLatch(1);
 
-
-		if (B1 == null || B2 == null) {
-			throw new IllegalArgumentException("NO BUTTON WITH LETTER : " + Button1 + " or " + Button2);
-		}
-
-		sb.enableButton(B1, () -> {
-			System.out.println("Button " + Button1 +  " Pressed!");
-			sb.disableAllButtons();
-			rint[0] = 1;
-		});
-		sb.enableButton(B2, () -> {
-			System.out.println("Button " + Button2 +  " Pressed!");
-			sb.disableAllButtons();
-			rint[0] = 2;
-		});
-		
-		while (rint[0] == -1 && System.currentTimeMillis() < EndTime) {
-	        ;// Wait for a button press or timeout
+	    if (B1 == null || B2 == null) {
+	        throw new IllegalArgumentException("NO BUTTON WITH LETTER : " + Button1 + " or " + Button2);
 	    }
-		
-		
-		if(rint[0] == -1) {
-			
-			ShowError("Please Press the Right Button.");
-			sb.disableAllButtons();
-			return getButtonInput(Question, Button1 , Button2 , sb);
-		}
 
-		return rint[0];
+	    sb.enableButton(B1, () -> {
+	        System.out.println("Button " + Button1 + " Pressed!");
+	        sb.disableAllButtons();
+	        rint[0] = 1;
+	        latch.countDown();
+	    });
+	    sb.enableButton(B2, () -> {
+	        System.out.println("Button " + Button2 + " Pressed!");
+	        sb.disableAllButtons();
+	        rint[0] = 2;
+	        latch.countDown();
+	    });
+
+	    try {
+	        // Wait for a button press or timeout
+	        if (!latch.await(TIMEOUT_IN_MILLI_SEC, TimeUnit.MILLISECONDS)) {
+	            ShowError("Timeout: Please Press the Right Button.");
+	            sb.disableAllButtons();
+	            return getButtonInput(Question, Button1, Button2, sb);
+	        }
+	    } catch (InterruptedException e) {
+	        e.printStackTrace();
+	    }
+
+	    return rint[0];
 	}
 	
 	private Button getButton(char ButtonLetter) {

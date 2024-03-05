@@ -2,6 +2,7 @@ import swiftbot.SwiftBotAPI;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.awt.image.BufferedImage;
+import java.lang.reflect.Array;
 
 public class Main {
 
@@ -11,7 +12,6 @@ public class Main {
 	static Triangle triangle = new Triangle();
 	static SwiftBotAPI sb = new SwiftBotAPI();
 	static Scanner getinp = new Scanner(System.in);
-	static PlaySound playSound = new PlaySound();
 
 	// Initialise all the Data Variables
 	static ArrayList<String> Drawn_Shape = new ArrayList<>();
@@ -19,7 +19,7 @@ public class Main {
 	static int Square_counter = 0;
 	static int Triangle_counter = 0;
 	static ArrayList<Double> Avg_time = new ArrayList<>();
-	static String Last_Drawn = "T 25 25 25";
+	static String Last_Drawn = "";
 	static boolean UserPlay = true;
 
 	public static void main(String[] args) {
@@ -33,7 +33,6 @@ public class Main {
 			int inp = displayMenuAndGetUserInput();
 			if (inp == 1) {
 				Decoded_Text = getQRCode();
-				System.out.println("Decoded Text : " + Decoded_Text);
 			} else if (inp == 2) {
 				Decoded_Text = Last_Drawn;
 			}
@@ -49,7 +48,7 @@ public class Main {
 				// If Square Format is Not Valid
 				if (!isSValid) {
 					utils.ShowError(
-							"\nNot Valid Square Format! \n Please Try Again after giving Text in Format. \"S length\" ");
+							"Not Valid Square Format! \nPlease Try Again after giving Text in Format. \"S length\" ");
 					continue;
 				}
 
@@ -82,7 +81,8 @@ public class Main {
 
 				if (!isTValid) {
 					utils.ShowError(
-							"\n \nNot Valid Triangle Format! \n Please Try Again after giving Text in Format. \"T side1 side2 side3\" ");
+							"\nNot Valid Triangle Format! \nPlease Try Again after giving Text in Format. \"T side1 side2 side3\" ");
+					utils.waitForTime(1000);
 					continue;
 				}
 
@@ -91,8 +91,9 @@ public class Main {
 				int side3 = Integer.decode(input[3]);
 
 				System.out.println("\nPlace Down the SwiftBot! Making Triangle of sides : " + side1 + " " + side2 + " "
-						+ side3 + " in 2 sec");
+						+ side3 + " in 4 sec");
 
+				utils.waitFor2s();
 				utils.waitFor2s();
 
 				// Makes Triangle
@@ -201,14 +202,9 @@ public class Main {
 		try {
 			String decodedText = sb.decodeQRImage(img);
 			if (!decodedText.isEmpty()) {
-				System.out.println("Play SUCCESS SOUND");
-//				playSound.playSoundOnce("/success.wav");
-				System.out.println(decodedText);
 				utils.ShowUnderLightsForGivensec('G',2,sb);
 				return decodedText;
 			} else {
-				System.out.println("Play Failed SOUND");
-//				playSound.playSoundOnce("/failed.wav");
 				utils.ShowUnderLightsForGivensec('R',1,sb);
 				utils.ShowError("Couldn't Scan QR Code Please Try again");
 				return getQRCode();
@@ -236,6 +232,8 @@ public class Main {
 		square.Draw(length, sb);
 		long endTime = System.currentTimeMillis();
 		long elapsedTime = endTime - startTime;
+		
+		utils.ShowUnderLightsForGivensec('G', 1, sb);
 
 		Avg_time.add((double) elapsedTime);
 		// Adding Shape to arrays to write in the file later
@@ -278,6 +276,8 @@ public class Main {
 		triangle.Draw(side1, side2, side3, angles, sb);
 		long endTime = System.currentTimeMillis();
 		long elapsedTime = endTime - startTime;
+		
+		utils.ShowUnderLightsForGivensec('G', 1, sb);
 
 		Avg_time.add((double) elapsedTime);
 		// Adding Shape to arrays to write in the file later

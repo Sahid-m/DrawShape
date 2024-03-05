@@ -18,15 +18,18 @@ public class Square {
     public boolean Validate(String[] input) {
         if (input.length != 2) {
             utils.ShowError("Please Give input in Format \" S length_of_side \" ex. \"S 30\" ");
+            utils.waitForTime(1000);
             return false;
         }
         int length = utils.ConvertInt(input[1]);
         if (length == -1) {
             utils.ShowError("Please Give Length of Side as Integer Only Between 15 - 85 ");
+            utils.waitForTime(1000);
             return false;
         }
         if (length < 15 || length > 85) {
             utils.ShowError("Please Give length only between 15 - 85");
+            utils.waitForTime(1000);
             return false;
         }
         return true;

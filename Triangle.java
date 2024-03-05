@@ -19,6 +19,7 @@ public class Triangle {
     public boolean Validate(String[] input) {
         if (input.length != 4) {
             utils.ShowError("Please Only Give input in format \"T side1 side2 side3\"  ");
+            utils.waitForTime(1000);
             return false;
         }
 
@@ -30,12 +31,14 @@ public class Triangle {
         // Validates if sides are integers within the range of 15 - 85.
         if (side1 == -1 || side2 == -1 || side3 == -1) {
             utils.ShowError("Please Give Length of Sides as Integers Only Between 15 - 85 ");
+            utils.waitForTime(1000);
             return false;
         }
 
         // Validates if sides are between 15 - 85.
         if (side1 < 15 || side1 > 85 || side2 < 15 || side2 > 85 || side3 < 15 || side3 > 85) {
             utils.ShowError("Please Give length only between 15 - 85");
+            utils.waitForTime(1000);
             return false;
         }
 
@@ -44,6 +47,7 @@ public class Triangle {
 
         if (!isTPossible) {
             utils.ShowError("Triangle With Given Sides is not Possible to make");
+            utils.waitForTime(1000);
             return false;
         }
 
@@ -135,8 +139,6 @@ public class Triangle {
     	sb.move(turnSpeed, 0, (int)timeForAngle1 );
     	waitForWheels();
     	
-    	
-    	
     	double time2 = TimeForSide(side2);
     	sb.move(speed, speed, (int)time2);
     	waitForWheels();
@@ -144,7 +146,6 @@ public class Triangle {
     	double timeForAngle2 = getTimeForAngle(180 - angle2);
     	sb.move(turnSpeed,0, (int)timeForAngle2 );
     	waitForWheels();
-    	
     	
     	double time3 = TimeForSide(side3);
     	sb.move(speed, speed, (int)time3);
@@ -156,8 +157,6 @@ public class Triangle {
     	
     	randomUnderlights.interrupt();
     	sb.disableUnderlights();
-        
-        
     }
     
     private double getTimeForAngle(double angle) {

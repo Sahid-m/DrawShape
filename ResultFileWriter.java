@@ -31,7 +31,7 @@ public class ResultFileWriter {
 
         // Create a File object with the specified file name.
         File myFile = new File(FileName);
-        System.out.println("\n Writing in File");
+        System.out.println("\nWriting in File");
 
         // Check if the file already exists.
         if (myFile.exists()) {
@@ -86,7 +86,7 @@ public class ResultFileWriter {
 
                 File.close(); // Close the FileWriter.
 
-                System.out.println("Successfully Wrote to file \n Exiting .... \n Have a Nice Day");
+                System.out.println("\nSuccessfully Wrote to file");
                 utils.waitFor2s(); // Wait for 2 seconds.
 
             } else {
